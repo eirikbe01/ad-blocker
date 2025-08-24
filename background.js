@@ -1,12 +1,13 @@
 
 
-chrome.webNavigation.onCommitted.addListener(function(tab) {
+chrome.webNavigation.onCommitted.addListener((details) => {
 
     if (details.frameId !== 0) return;
 
     try {
         const url = new URL(details.url);
-        if (url.hostname.replace("/^www\./", "") === "linkedin.com") {
+        const hostname = url.hostname.replace(/^www\./, "")
+        if (hostname === "linkedin.com") {
             chrome.scripting.executeScript({
                 target: { tabId: details.tabId },
                 files: ["linkedin.js"]
@@ -16,4 +17,3 @@ chrome.webNavigation.onCommitted.addListener(function(tab) {
         console.error("Failed to parse URL: ", err);
     }
 });
-
